@@ -4,20 +4,30 @@ import fitz  #PyMuPDF for PDF handling
 import docx  #python-docx for DOCX handling
 
 #Initialize the model and tokenizer
-model_name = "t5-small" 
+model_name = "t5-base" 
 tokenizer = T5Tokenizer.from_pretrained(model_name)
 model = T5ForConditionalGeneration.from_pretrained(model_name)
 
 #Summarization function
-def summarize_text(text, max_input_length=512, max_output_length=150):
-    # Prepare the input for summarization
+def summarize_text(text, max_input_length=512, max_output_length=100):
+    #Prepare the input for summarization
     input_text = "summarize: " + text
     inputs = tokenizer.encode(input_text, return_tensors="pt", max_length=max_input_length, truncation=True)
 
-    #Generate the summary
-    summary_ids = model.generate(inputs, max_length=max_output_length, min_length=40, length_penalty=2.0, num_beams=4, early_stopping=True)
+    #Generate the summary with adjusted parameters
+    summary_ids = model.generate(
+        inputs,
+        max_length=max_output_length,
+        min_length=40,             #Minimum length for the summary to avoid very short results
+        length_penalty=2.5,        #Higher length penalty encourages shorter summaries
+        num_beams=4,               #Use fewer beams for faster but more varied results
+        do_sample=True,            #Enables sampling for more diversity
+        temperature=0.7,           #Controls the randomness of predictions
+        early_stopping=True
+    )
     summary = tokenizer.decode(summary_ids[0], skip_special_tokens=True)
     return summary
+
 
 #Function to read different document types
 def read_file(file):
