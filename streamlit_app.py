@@ -12,7 +12,7 @@ model = T5ForConditionalGeneration.from_pretrained(model_name)
 def summarize_text(text, max_input_length=512, max_output_length=100):
     #Prepare the input for summarization
     input_text = "summarize: " + text
-    inputs = tokenizer.encode(input_text, return_tensors="pt", max_length=max_input_length, truncation=True)
+    inputs = tokenizer.encode(input_text, return_tensors="pt", max_length=max_input_length)
 
     #Generate the summary with adjusted parameters
     summary_ids = model.generate(
