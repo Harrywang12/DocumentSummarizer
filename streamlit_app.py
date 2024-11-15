@@ -5,14 +5,14 @@ import docx  #python-docx for DOCX handling
 
 #Initialize the model and tokenizer
 model_name = "t5-base" 
-tokenizer = T5Tokenizer.from_pretrained(model_name)
+tokenizer = T5Tokenizer.from_pretrained(model_name, legacy=False)
 model = T5ForConditionalGeneration.from_pretrained(model_name)
 
 #Summarization function
 def summarize_text(text, max_input_length=512, max_output_length=100):
     #Prepare the input for summarization
     input_text = "summarize: " + text
-    inputs = tokenizer.encode(input_text, return_tensors="pt", max_length=max_input_length)
+    inputs = tokenizer.encode(input_text, return_tensors="pt", max_length=max_input_length, truncation=True)
 
     #Generate the summary with adjusted parameters
     summary_ids = model.generate(
