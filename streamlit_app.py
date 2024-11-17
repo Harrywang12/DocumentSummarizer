@@ -5,7 +5,7 @@ import docx  #python-docx for DOCX handling
 
 #Initialize the model and tokenizer
 model_name = "t5-base" 
-tokenizer = T5Tokenizer.from_pretrained(model_name, legacy=False)
+tokenizer = T5Tokenizer.from_pretrained(model_name)
 model = T5ForConditionalGeneration.from_pretrained(model_name)
 
 #Summarization function
